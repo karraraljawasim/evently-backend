@@ -1,0 +1,30 @@
+{
+  "name": "eventcore-api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "migrate": "node-pg-migrate --envPath .env.development.local",
+    "migrate:create": "node-pg-migrate create --module-type esm"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.4",
+    "debug": "^2.6.9",
+    "dotenv": "^17.3.1",
+    "express": "^4.16.1",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.9.1",
+    "node-pg-migrate": "^8.0.4",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.2",
+    "globals": "^17.4.0",
+    "nodemon": "^3.1.14",
+    "typescript-eslint": "^8.56.1"
+  }
+}
