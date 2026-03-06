@@ -9,11 +9,11 @@ export const createUser = async (
 ) => {
   const result = await pool.query(
     `
-        INSERT INTO users(firstName, lastName, email, role, password)
+        INSERT INTO users(first_name, last_name, email, role, password)
         VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
     [firstName, lastName, email, role, password],
   );
-  return result.rows[0];
+  return result.rows;
 };
 
 export const getUser = async (email) => {
@@ -25,7 +25,7 @@ export const getUser = async (email) => {
         `,
     [email],
   );
-  return result.rows[0];
+  return result.rows;
 };
 
 export const findUserByEmail = async (email) => {
@@ -36,6 +36,16 @@ export const findUserByEmail = async (email) => {
         WHERE email = $1;
         `,
     [email],
+  );
+  return result.rows;
+};
+
+export const findUserById = async (userId) => {
+  const result = await pool.query(
+    `SELECT * FROM users
+     WHERE user_id = $1;
+    `,
+    [userId],
   );
   return result.rows;
 };

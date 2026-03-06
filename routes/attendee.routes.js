@@ -1,14 +1,14 @@
 import { Router } from "express";
+import {
+  getAllUpcomingEvents,
+  getEventDetils,
+} from "../controllers/attendee.controller.js";
 
 const attendeeRouters = Router();
 
-attendeeRouters.get("/", (req, res) => {
-  res.json({ title: "GET all upcoming events" });
-});
+attendeeRouters.get("/", getAllUpcomingEvents);
 
-attendeeRouters.get("/:eventId", (req, res) => {
-  res.json({ title: "GET specific event details" });
-});
+attendeeRouters.get("/:eventId", getEventDetils);
 
 attendeeRouters.post("/:eventId/register", (req, res) => {
   res.json({ title: "Cleck and register to specific event " });

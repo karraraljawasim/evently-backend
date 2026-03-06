@@ -1,21 +1,21 @@
 import { Router } from "express";
+import {
+  createEvent,
+  deleteEvent,
+  updateEvent,
+} from "../controllers/organizer.controller.js";
+import authorize from "../middlewares/auth.middleware.js";
 
 const organizerRouters = Router();
 
-organizerRouters.post("/", (req, res) => {
-  res.json({ title: "Create new event" });
-});
+organizerRouters.post("/", authorize, createEvent);
 
 organizerRouters.get("/:eventId/attendees", (req, res) => {
   res.json({ title: "GET all attendees to thier event " });
 });
 
-organizerRouters.put("/:eventId", (req, res) => {
-  res.json({ title: "UPDATE event" });
-});
+organizerRouters.put("/:eventId", authorize, updateEvent);
 
-organizerRouters.delete("/:eventId", (req, res) => {
-  res.json({ title: "DELETE event" });
-});
+organizerRouters.delete("/:eventId", authorize, deleteEvent);
 
 export default organizerRouters;

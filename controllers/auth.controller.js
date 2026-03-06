@@ -30,7 +30,7 @@ export const signUp = async (req, res, next) => {
       hashedPassword,
     );
 
-    const token = jwt.sign({ userId: newUser.userId }, JWT_SECRET, {
+    const token = jwt.sign({ userId: newUser[0].user_id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
 
@@ -59,15 +59,13 @@ export const signIn = async (req, res, next) => {
       throw error;
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user[0].password);
     if (!isPasswordValid) {
       const error = new AppError("Invalid Password");
       throw error;
     }
 
-    const token = jwt.sign({ userId: user.userId }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign({ userId: user[0].user_id }, JWT_SECRET);
 
     res.status(200).json({
       success: true,
