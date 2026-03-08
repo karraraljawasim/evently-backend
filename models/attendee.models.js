@@ -20,3 +20,34 @@ export const getEventDetil = async (eventId) => {
   );
   return result.rows;
 };
+
+export const registerToEventModel = async (attendeeId, eventId) => {
+  const result = await pool.query(
+    `
+    INSERT INTO registrations (attendee_id, event_id)
+    VALUES ($1, $2) RETURNING *;
+    `,
+    [attendeeId, eventId],
+  );
+
+  return result.rows;
+};
+
+export const getAllEventsAdttendModel = async (attendeeId) => {
+  const result = await pool.query(
+    `
+    SELECT events.event_id,
+           events.title,
+           events.location,
+           events.date_happens,
+           events.organizer_id,
+           registrations.register_at
+    FROM events 
+    INNER JOIN registrations 
+      ON events.event_id = registrations.event_id
+    WHERE registrations.attendee_id = $1;
+    `,
+    [attendeeId],
+  );
+  return result.rows;
+};

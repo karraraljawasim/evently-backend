@@ -2,6 +2,7 @@ import pool from "../database/db.js";
 import {
   createEventModele,
   deleteEventModel,
+  getAttendeesToEventMoudel,
   updateEventModel,
 } from "../models/organizer.models.js";
 import AppError from "../utils/AppError.js";
@@ -122,6 +123,52 @@ export const deleteEvent = async (req, res, next) => {
     res.status(200).json({
       success: true,
       deletedEvent: deletedEvent[0],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAttendeesToEvent = async (req, res, next) => {
+  try {
+    const eventId = req.params.eventId;
+    const parseId = parseInt(eventId, 10);
+
+    if (isNaN(parseId)) {
+      const error = AppError("Event Id must be intger number", 400);
+      throw error;
+    }
+
+    const event = await (async (eventId) => {
+      const result = await pool.query(
+        `
+        SELECT organizer_id
+        FROM events 
+        WHERE event_id = $1;
+        `,
+        [eventId],
+      );
+      return result.rows;
+    })(eventId);
+
+    if (event.length === 0) {
+      const error = new AppError("Event not found", 404);
+      throw error;
+    }
+
+    if (req.user[0].user_id !== event[0].organizer_id) {
+      const error = new AppError(
+        "You are not the organizer to this event",
+        401,
+      );
+      throw error;
+    }
+
+    const attendeesList = await getAttendeesToEventMoudel(eventId);
+
+    res.status(200).json({
+      success: true,
+      attendeesList: attendeesList,
     });
   } catch (error) {
     next(error);

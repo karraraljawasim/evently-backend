@@ -1,3 +1,4 @@
+import e from "express";
 import pool from "../database/db.js";
 
 export const createEventModele = async (
@@ -42,6 +43,24 @@ export const deleteEventModel = async (eventId) => {
     `
     DELETE FROM events 
     WHERE event_id = $1 RETURNING *;
+    `,
+    [eventId],
+  );
+  return result.rows;
+};
+
+export const getAttendeesToEventMoudel = async (eventId) => {
+  const result = await pool.query(
+    `
+    SELECT users.user_id,
+           CONCAT(users.first_name, users.last_name) AS full_name,
+           users.email
+    FROM users 
+    INNER JOIN registrations
+      ON users.user_id = registrations.attendee_id
+    WHERE registrations.event_id = $1;
+
+           
     `,
     [eventId],
   );
