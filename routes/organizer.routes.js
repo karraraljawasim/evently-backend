@@ -17,9 +17,4 @@ organizerRouters.put("/:eventId", authorize, updateEvent);
 
 organizerRouters.delete("/:eventId", authorize, deleteEvent);
 
-// organizerRouters.all("*", (req, res, next) => {
-//   const error = new AppError("Route not found", 404);
-//   throw error;
-// });
-
 export default organizerRouters;

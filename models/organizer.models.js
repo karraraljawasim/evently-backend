@@ -1,7 +1,7 @@
-import e from "express";
 import pool from "../database/db.js";
 
 export const createEventModele = async (
+  eventId,
   title,
   description,
   location,
@@ -11,10 +11,18 @@ export const createEventModele = async (
 ) => {
   const result = await pool.query(
     `
-        INSERT INTO events (title, description, location , date_happens, organizer_id, max_capacity )
-        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+        INSERT INTO events (event_id, title, description, location , date_happens, organizer_id, max_capacity )
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;
         `,
-    [title, description, location, dateHappens, organizerId, maxCapacity],
+    [
+      eventId,
+      title,
+      description,
+      location,
+      dateHappens,
+      organizerId,
+      maxCapacity,
+    ],
   );
   return result.rows;
 };
@@ -61,6 +69,18 @@ export const getAttendeesToEventMoudel = async (eventId) => {
     WHERE registrations.event_id = $1;
 
            
+    `,
+    [eventId],
+  );
+  return result.rows;
+};
+
+export const getEventByIdModel = async (eventId) => {
+  const result = await pool.query(
+    `
+    SELECT * 
+    FROM events
+    WHERE event_id = $1;
     `,
     [eventId],
   );

@@ -1,20 +1,17 @@
-import pool from "../database/db.js";
+import { v7 as uuidv7 } from "uuid";
 import {
-  getUpcomingEvents,
-  getEventDetil,
   registerToEventModel,
   getAllEventsAdttendModel,
+  getEventByIdModel,
+  updateEventRemainingSeatsModel,
+  getUpcomingEventsModel,
+  getEventRegistrationToAttendeeModel,
 } from "../models/attendee.models.js";
 import AppError from "../utils/AppError.js";
 
 export const getAllUpcomingEvents = async (req, res, next) => {
   try {
-    const upcomingEvent = await getUpcomingEvents();
-
-    if (upcomingEvent.length === 0) {
-      const error = new AppError("Not Upcoming Event", 404);
-      throw error;
-    }
+    const upcomingEvent = await getUpcomingEventsModel();
 
     res.status(200).json({
       success: true,
@@ -28,16 +25,13 @@ export const getAllUpcomingEvents = async (req, res, next) => {
 export const getEventDetils = async (req, res, next) => {
   try {
     const eventId = req.params.eventId;
-    const parserId = parseInt(eventId, 10);
-    if (isNaN(parserId)) {
-      const error = new AppError("Event Id  must be number", 400);
-      throw error;
-    }
 
-    const event = await getEventDetil(eventId);
+    console.log(eventId);
+
+    const event = await getEventByIdModel(eventId);
 
     if (event.length === 0) {
-      const error = new AppError("Event Not Found", 404);
+      const error = new AppError("Event not found", 404);
       throw error;
     }
 
@@ -53,21 +47,11 @@ export const getEventDetils = async (req, res, next) => {
 export const registerToEvent = async (req, res, next) => {
   try {
     const eventId = req.params.eventId;
-    const event = await (async (eventId) => {
-      const result = await pool.query(
-        `
-          SELECT max_capacity,
-                 remaining_seats
-          FROM events
-          WHERE event_id = $1;
-        `,
-        [eventId],
-      );
-      return result.rows;
-    })(eventId);
+
+    const event = await getEventByIdModel(eventId);
 
     if (event.length === 0) {
-      const error = new AppError("Event Not Found", 404);
+      const error = new AppError("Event not found", 404);
       throw error;
     }
 
@@ -83,22 +67,29 @@ export const registerToEvent = async (req, res, next) => {
 
     const attendeeId = req.user[0].user_id;
 
-    const registeredToEvent = await registerToEventModel(attendeeId, eventId);
-    if (event[0].remaining_seats > 0) {
-      await (async (eventId) => {
-        const result = await pool.query(
-          `
-        UPDATE events 
-        SET remaining_seats = remaining_seats - 1
-        WHERE event_id = $1;
-        `,
-          [eventId],
-        );
-      })(eventId);
+    const registrationExist = await getEventRegistrationToAttendeeModel(
+      attendeeId,
+      eventId,
+    );
+    if (registrationExist.length !== 0) {
+      const error = new AppError("You alrady registare to this event", 405);
+      throw error;
     }
+
+    const registrationId = uuidv7();
+
+    const registeredToEvent = await registerToEventModel(
+      registrationId,
+      attendeeId,
+      eventId,
+    );
+
+    if (event[0].remaining_seats > 0)
+      await updateEventRemainingSeatsModel(eventId);
+
     res.status(201).json({
       success: true,
-      message: `Registerd to event successfully `,
+      message: `Register to event successfully `,
       registerToEvent: registeredToEvent[0],
     });
   } catch (error) {
@@ -108,17 +99,12 @@ export const registerToEvent = async (req, res, next) => {
 
 export const getAllEventsAdttend = async (req, res, next) => {
   try {
-    if (req.user[0].role === "Organizer") {
-      const error = new AppError("Allow just to attendees", 401);
-      throw error;
-    }
-
     const attendeeId = req.user[0].user_id;
 
     const listOfAttendEvents = await getAllEventsAdttendModel(attendeeId);
 
     if (listOfAttendEvents.length === 0) {
-      const error = new AppError("Not Events Attend", 404);
+      const error = new AppError("There are no events You can atttend", 404);
       throw error;
     }
 

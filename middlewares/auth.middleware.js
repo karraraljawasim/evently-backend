@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import AppError from "../utils/AppError.js";
 import { JWT_SECRET } from "../config/env.js";
-import { findUserById } from "../models/auth.models.js";
+import { findUserByIdModel } from "../models/auth.models.js";
 
 const authorize = async (req, res, next) => {
   try {
@@ -15,15 +15,15 @@ const authorize = async (req, res, next) => {
     }
 
     if (!token) {
-      const error = new AppError("Unauthorized A", 401);
+      const error = new AppError("Unauthorized", 401);
       throw error;
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    const user = await findUserById(decoded.userId);
+    const user = await findUserByIdModel(decoded.userId);
     if (!user) {
-      const error = new AppError("Unauthorized B");
+      const error = new AppError("Unauthorized");
       throw error;
     }
 

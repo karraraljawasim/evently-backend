@@ -1,5 +1,6 @@
 export const up = (pgm) => {
   pgm.sql(`
+      BEGIN;
         ALTER TABLE events
         DROP CONSTRAINT IF EXISTS FK_usersEnvets;
         ALTER TABLE events
@@ -20,11 +21,13 @@ export const up = (pgm) => {
         ADD CONSTRAINT FK_eventsRegistrations
         FOREIGN KEY (event_id) REFERENCES events(event_id)
         ON DELETE CASCADE;
+      COMMIT;
         `);
 };
 
 export const down = (pgm) => {
   pgm.sql(`
+      BEGIN;
         ALTER TABLE events
         DROP CONSTRAINT IF EXISTS FK_usersEnvets;
         ALTER TABLE events
@@ -41,6 +44,7 @@ export const down = (pgm) => {
         DROP CONSTRAINT IF EXISTS FK_eventsRegistrations;
         ALTER TABLE registrations
         ADD CONSTRAINT FK_eventsRegistrations
-        FOREIGN KEY (event_id) REFERENCES users(event_id);
+        FOREIGN KEY (event_id) REFERENCES events(event_id);
+      COMMIT;
         `);
 };

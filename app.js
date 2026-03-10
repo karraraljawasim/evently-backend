@@ -17,8 +17,6 @@ app.use("/api/v1/events", attendeeRouters);
 app.use("/api/v1/events", organizerRouters);
 app.use(errorHandler);
 
-console.log(new Date());
-
 app.get("/", (req, res) => {
   res.status(200).send("Welcome to EVENTCORE API homepage");
 });

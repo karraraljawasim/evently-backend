@@ -1,5 +1,6 @@
 export const up = (pgm) => {
   pgm.sql(`
+      BEGIN;
         ALTER TABLE users
         RENAME COLUMN  userId TO  user_id;
         ALTER TABLE users
@@ -24,17 +25,19 @@ export const up = (pgm) => {
         RENAME COLUMN  registerAt TO register_at  ;
         ALTER TABLE registrations
         RENAME COLUMN  eventId TO event_id  ;
+      COMMIT;
         `);
 };
 
 export const down = (pgm) => {
   pgm.sql(`
+      BEGIN;
         ALTER TABLE users
         RENAME COLUMN  user_id TO  userId;
         ALTER TABLE users
         RENAME COLUMN  first_name TO firstName  ;
         ALTER TABLE users
-        RENAME COLUMN las_name TO lastName  ;
+        RENAME COLUMN last_name TO lastName  ;
 
         ALTER TABLE events
         RENAME COLUMN organizer_id  TO organizerId ;
@@ -53,5 +56,6 @@ export const down = (pgm) => {
         RENAME COLUMN  register_at TO registerAt  ;
         ALTER TABLE registrations
         RENAME COLUMN  event_id TO eventId  ;
+      COMMIT;
         `);
 };

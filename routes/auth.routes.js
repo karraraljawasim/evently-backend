@@ -8,8 +8,4 @@ authRoutes.post("/sign-up", signUp);
 
 authRoutes.post("/sign-in", signIn);
 
-// authRoutes.all("*", (req, rest) => {
-//   const error = new AppError("Route not found", 404);
-//   throw error;
-// });
 export default authRoutes;
