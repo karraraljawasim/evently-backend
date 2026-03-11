@@ -5,8 +5,8 @@ import {
   getAllUpcomingEvents,
   getEventDetils,
   registerToEvent,
+  searchByTitle,
 } from "../controllers/attendee.controller.js";
-import AppError from "../utils/AppError.js";
 
 const attendeeRouters = Router();
 
@@ -16,11 +16,8 @@ attendeeRouters.get("/current-register", authorize, getAllEventsAdttend);
 
 attendeeRouters.get("/:eventId/info", getEventDetils);
 
-attendeeRouters.post("/:eventId/register", authorize, registerToEvent);
+attendeeRouters.get("/title-search/:title", searchByTitle);
 
-// attendeeRouters.all("*", (req, res, next) => {
-//   const error = new AppError("Route not found", 404);
-//   throw error;
-// });
+attendeeRouters.post("/:eventId/register", authorize, registerToEvent);
 
 export default attendeeRouters;

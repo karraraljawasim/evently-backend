@@ -6,6 +6,7 @@ import {
   updateEventRemainingSeatsModel,
   getUpcomingEventsModel,
   getEventRegistrationToAttendeeModel,
+  searchByTitleModel,
 } from "../models/attendee.models.js";
 import AppError from "../utils/AppError.js";
 
@@ -111,6 +112,31 @@ export const getAllEventsAdttend = async (req, res, next) => {
     res.status(200).json({
       success: true,
       listOfAttendEvents: listOfAttendEvents,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const searchByTitle = async (req, res, next) => {
+  try {
+    const title = req.params.title;
+    console.log(title);
+
+    if (!title) {
+      const error = new AppError("You must enter the title to search", 400);
+      throw error;
+    }
+    const result = await searchByTitleModel(title);
+
+    if (result.length === 0) {
+      const error = new AppError("No Result", 404);
+      throw error;
+    }
+
+    res.status(200).json({
+      success: true,
+      result: result,
     });
   } catch (error) {
     next(error);

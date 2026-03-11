@@ -82,3 +82,16 @@ export const getEventRegistrationToAttendeeModel = async (
   );
   return result.rows;
 };
+
+export const searchByTitleModel = async (title) => {
+  console.log(title);
+  const result = await pool.query(
+    `
+    SELECT * 
+    FROM events
+    WHERE title LIKE '%' || $1 || '%';
+    `,
+    [title],
+  );
+  return result.rows;
+};
