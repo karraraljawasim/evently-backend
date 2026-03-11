@@ -15,7 +15,7 @@ export const up = (pgm) => {
         CREATE TRIGGER
         trigger_set_remaining_seats_initial_value
         BEFORE INSERT ON events
-        FOR EACH ROW 
+        FOR EACH ROW
         EXECUTE FUNCTION set_remaining_seats_initial_value();
       COMMIT;
         `);

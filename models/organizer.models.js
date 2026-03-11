@@ -28,20 +28,25 @@ export const createEventModele = async (
 };
 
 export const updateEventModel = async (
+  title,
   dateHappens,
   location,
   description,
   maxCapacity,
+  eventId,
 ) => {
   const result = await pool.query(
     `
     UPDATE events
-    SET date_happens = $1,
-        location = $2,
-        description = $3,
-        max_capacity = $4 RETURNING *;
+    SET title = $1,
+        date_happens = $2,
+        location = $3,
+        description = $4,
+        max_capacity = $5 
+    WHERE event_id = $6 
+    RETURNING *;
    `,
-    [dateHappens, location, description, maxCapacity],
+    [title, dateHappens, location, description, maxCapacity, eventId],
   );
   return result.rows;
 };

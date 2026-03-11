@@ -58,8 +58,13 @@ export const createEvent = async (req, res, next) => {
 
 export const updateEvent = async (req, res, next) => {
   try {
-    const { dateHappens, description, location, maxCapacity } = req.body;
+    const { title, dateHappens, description, location, maxCapacity } = req.body;
     const eventId = req.params.eventId;
+
+    if (!(title && dateHappens && description && location && maxCapacity)) {
+      const error = new AppError("Bad Requste", 400);
+      throw error;
+    }
 
     const event = await getEventByIdModel(eventId);
 
@@ -77,10 +82,12 @@ export const updateEvent = async (req, res, next) => {
     }
 
     const updatedEvent = await updateEventModel(
+      title,
       dateHappens,
       description,
       location,
       maxCapacity,
+      eventId,
     );
 
     res.status(200).json({
