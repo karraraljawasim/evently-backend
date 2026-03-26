@@ -6,7 +6,6 @@ import {
   updateEventRemainingSeatsModel,
   getUpcomingEventsModel,
   getEventRegistrationToAttendeeModel,
-  searchByTitleModel,
 } from "../models/attendee.models.js";
 import AppError from "../utils/AppError.js";
 
@@ -26,8 +25,6 @@ export const getAllUpcomingEvents = async (req, res, next) => {
 export const getEventDetils = async (req, res, next) => {
   try {
     const eventId = req.params.eventId;
-
-    console.log(eventId);
 
     const event = await getEventByIdModel(eventId);
 
@@ -79,11 +76,7 @@ export const registerToEvent = async (req, res, next) => {
 
     const registrationId = uuidv7();
 
-    const registeredToEvent = await registerToEventModel(
-      registrationId,
-      attendeeId,
-      eventId,
-    );
+    await registerToEventModel(registrationId, attendeeId, eventId);
 
     if (event[0].remaining_seats > 0)
       await updateEventRemainingSeatsModel(eventId);
@@ -91,7 +84,6 @@ export const registerToEvent = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: `Register to event successfully `,
-      registerToEvent: registeredToEvent[0],
     });
   } catch (error) {
     next(error);
@@ -112,31 +104,6 @@ export const getAllEventsAdttend = async (req, res, next) => {
     res.status(200).json({
       success: true,
       listOfAttendEvents: listOfAttendEvents,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const searchByTitle = async (req, res, next) => {
-  try {
-    const title = req.params.title;
-    console.log(title);
-
-    if (!title) {
-      const error = new AppError("You must enter the title to search", 400);
-      throw error;
-    }
-    const result = await searchByTitleModel(title);
-
-    if (result.length === 0) {
-      const error = new AppError("No Result", 404);
-      throw error;
-    }
-
-    res.status(200).json({
-      success: true,
-      result: result,
     });
   } catch (error) {
     next(error);

@@ -4,7 +4,7 @@ import { PORT } from "./config/env.js";
 import authRoutes from "./routes/auth.routes.js";
 import attendeeRouters from "./routes/attendee.routes.js";
 import organizerRouters from "./routes/organizer.routes.js";
-import errorHandler from "./middlewares/errorHandler.js";
+import errorHandler from "./middlewares/errorHandler.middleware.js";
 
 const app = express();
 

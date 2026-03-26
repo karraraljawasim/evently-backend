@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon server.js",
+    "start:pro": "cross-env NODE_ENV=production nodemon server.js",
     "migrate": "node-pg-migrate --envPath .env.development.local",
     "migrate:create": "node-pg-migrate create --module-type esm"
   },
@@ -25,7 +26,6 @@
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.2",
     "globals": "^17.4.0",
-    "nodemon": "^3.1.14",
-    "typescript-eslint": "^8.56.1"
+    "nodemon": "^3.1.14"
   }
 }

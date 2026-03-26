@@ -23,7 +23,7 @@ const authorize = async (req, res, next) => {
 
     const user = await findUserByIdModel(decoded.userId);
     if (!user) {
-      const error = new AppError("Unauthorized");
+      const error = new AppError("Unauthorized", 401);
       throw error;
     }
 

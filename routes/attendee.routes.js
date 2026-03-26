@@ -5,18 +5,15 @@ import {
   getAllUpcomingEvents,
   getEventDetils,
   registerToEvent,
-  searchByTitle,
 } from "../controllers/attendee.controller.js";
 
 const attendeeRouters = Router();
 
-attendeeRouters.get("/upcoming-events", getAllUpcomingEvents);
+attendeeRouters.get("/upcoming", authorize, getAllUpcomingEvents);
 
 attendeeRouters.get("/current-register", authorize, getAllEventsAdttend);
 
-attendeeRouters.get("/:eventId/info", getEventDetils);
-
-attendeeRouters.get("/title-search/:title", searchByTitle);
+attendeeRouters.get("/:eventId", authorize, getEventDetils);
 
 attendeeRouters.post("/:eventId/register", authorize, registerToEvent);
 

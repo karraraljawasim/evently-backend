@@ -18,7 +18,6 @@ export const signUp = async (req, res, next) => {
     }
 
     const normalizedEmail = email.toLowerCase();
-    console.log(normalizedEmail);
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(normalizedEmail)) {
@@ -54,7 +53,7 @@ export const signUp = async (req, res, next) => {
     res.status(201).json({
       success: true,
       token,
-      data: newUser,
+      message: "User signUp successfully",
     });
   } catch (error) {
     next(error);

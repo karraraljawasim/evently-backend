@@ -23,7 +23,6 @@ export const createEvent = async (req, res, next) => {
     }
 
     const organizerId = req.user[0].user_id;
-    console.log(organizerId);
 
     if (!(title && description && location && dateHappens && maxCapacity)) {
       const error = new AppError("Bad Request", 400);
@@ -31,7 +30,7 @@ export const createEvent = async (req, res, next) => {
     }
 
     if (req.user[0].role !== "Organizer") {
-      const error = new AppError("Just organizer can create event", 401);
+      const error = new AppError("Just organizer can create event", 403);
       throw error;
     }
 
