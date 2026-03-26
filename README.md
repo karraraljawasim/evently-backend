@@ -141,10 +141,10 @@ DB_USER=postgres
 DB_PASSWORD=[your_postgres_password]
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=EVENTLY_API_DB
+DB_NAME=evently_api_db
 
 # Full Database Connection String
-DATABASE_URL=postgresql://[user]:[password]@localhost:5432/EVENTLY_API_DB
+DATABASE_URL=postgresql://[user]:[password]@localhost:5432/evently_api_db
 
 # JWT Configuration
 JWT_SECRET="[a_long_random_secret_string]"
@@ -163,8 +163,11 @@ JWT_EXPIRES_IN="4d"
 **Step 1 — Create the database:**
 
 ```bash
-psql -U postgres -c "CREATE DATABASE \"EVENTLY_API_DB\";"
+psql -U postgres -c 'CREATE DATABASE \"evently_api_db\";'
 ```
+**Or Create the datebase by using a visual tool like pgAdmin**
+
+
 
 **Step 2 — Apply all migrations to build the schema:**
 
