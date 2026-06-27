@@ -65,7 +65,7 @@ export const signIn = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!(email || password)) {
-      const error = new AppError("Email and Password is reqiuredt", 400);
+      const error = new AppError("Email and Password is required", 400);
       throw error;
     }
 

@@ -1,8 +1,8 @@
 import { v7 as uuidv7 } from "uuid";
 import {
-  createEventModele,
+  createEventModel,
   deleteEventModel,
-  getAttendeesToEventMoudel,
+  getAttendeesToEventModel,
   getEventByIdModel,
   updateEventModel,
 } from "../models/organizer.models.js";
@@ -30,12 +30,12 @@ export const createEvent = async (req, res, next) => {
     }
 
     if (req.user[0].role !== "Organizer") {
-      const error = new AppError("Just organizer can create event", 403);
+      const error = new AppError("Just organizer can create event", 401);
       throw error;
     }
 
     const eventId = uuidv7();
-    const newEvent = await createEventModele(
+    const newEvent = await createEventModel(
       eventId,
       title,
       description,
@@ -61,14 +61,14 @@ export const updateEvent = async (req, res, next) => {
     const eventId = req.params.eventId;
 
     if (!(title && dateHappens && description && location && maxCapacity)) {
-      const error = new AppError("Bad Requste", 400);
+      const error = new AppError("Bad request", 400);
       throw error;
     }
 
     const event = await getEventByIdModel(eventId);
 
     if (event.length === 0) {
-      const error = new AppError("Event not found");
+      const error = new AppError("Event not found", 404);
       throw error;
     }
 
@@ -149,7 +149,7 @@ export const getAttendeesToEvent = async (req, res, next) => {
       throw error;
     }
 
-    const attendeesList = await getAttendeesToEventMoudel(eventId);
+    const attendeesList = await getAttendeesToEventModel(eventId);
 
     res.status(200).json({
       success: true,

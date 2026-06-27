@@ -1,6 +1,6 @@
 import pool from "../database/db.js";
 
-export const createEventModele = async (
+export const createEventModel = async (
   eventId,
   title,
   description,
@@ -62,7 +62,7 @@ export const deleteEventModel = async (eventId) => {
   return result.rows;
 };
 
-export const getAttendeesToEventMoudel = async (eventId) => {
+export const getAttendeesToEventModel = async (eventId) => {
   const result = await pool.query(
     `
     SELECT users.user_id,

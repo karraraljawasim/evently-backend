@@ -26,7 +26,7 @@ export const registerToEventModel = async (
   return result.rows;
 };
 
-export const getAllEventsAdttendModel = async (attendeeId) => {
+export const getAllCurrentRegisterEventsModel = async (attendeeId) => {
   const result = await pool.query(
     `
     SELECT events.event_id,

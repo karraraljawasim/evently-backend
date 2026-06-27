@@ -165,9 +165,8 @@ JWT_EXPIRES_IN="4d"
 ```bash
 psql -U postgres -c 'CREATE DATABASE \"evently_api_db\";'
 ```
-**Or Create the datebase by using a visual tool like pgAdmin**
 
-
+**Or Create the database by using a visual tool like pgAdmin**
 
 **Step 2 — Apply all migrations to build the schema:**
 

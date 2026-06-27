@@ -1,13 +1,13 @@
 {
-  "name": "eventcore-api",
+  "name": "evently-api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon server.js",
-    "start:pro": "cross-env NODE_ENV=production nodemon server.js",
+    "dev": "nodemon server.js",
     "migrate": "node-pg-migrate --envPath .env.development.local",
+    "migrate:up": "node-pg-migrate up",
     "migrate:create": "node-pg-migrate create --module-type esm"
   },
   "dependencies": {
@@ -20,6 +20,9 @@
     "morgan": "^1.9.1",
     "node-pg-migrate": "^8.0.4",
     "pg": "^8.20.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-model-validator": "^3.0.21",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

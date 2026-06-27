@@ -1,7 +1,7 @@
 import { v7 as uuidv7 } from "uuid";
 import {
   registerToEventModel,
-  getAllEventsAdttendModel,
+  getAllCurrentRegisterEventsModel,
   getEventByIdModel,
   updateEventRemainingSeatsModel,
   getUpcomingEventsModel,
@@ -22,7 +22,7 @@ export const getAllUpcomingEvents = async (req, res, next) => {
   }
 };
 
-export const getEventDetils = async (req, res, next) => {
+export const getEventDetails = async (req, res, next) => {
   try {
     const eventId = req.params.eventId;
 
@@ -70,7 +70,7 @@ export const registerToEvent = async (req, res, next) => {
       eventId,
     );
     if (registrationExist.length !== 0) {
-      const error = new AppError("You alrady registare to this event", 405);
+      const error = new AppError("You already register to this event", 405);
       throw error;
     }
 
@@ -90,16 +90,12 @@ export const registerToEvent = async (req, res, next) => {
   }
 };
 
-export const getAllEventsAdttend = async (req, res, next) => {
+export const getAllCurrentRegisterEvents = async (req, res, next) => {
   try {
     const attendeeId = req.user[0].user_id;
 
-    const listOfAttendEvents = await getAllEventsAdttendModel(attendeeId);
-
-    if (listOfAttendEvents.length === 0) {
-      const error = new AppError("There are no events You can atttend", 404);
-      throw error;
-    }
+    const listOfAttendEvents =
+      await getAllCurrentRegisterEventsModel(attendeeId);
 
     res.status(200).json({
       success: true,
