@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { signIn, signUp } from "../controllers/auth.controller.js";
 
-const authRoutes = Router();
+const authRoutes =  Router();
 
 /**
  * @swagger
@@ -57,8 +57,10 @@ const authRoutes = Router();
  *           schema:
  *             $ref: '#/components/schemas/SignUpRequest'
  *     responses:
- *       200:
+ *       201:
  *         description: Sign up successfully
+ *       409:
+ *         description: User already exists
  *       400:
  *         description: Invalid data input
  */
@@ -78,7 +80,7 @@ authRoutes.post("/sign-up", signUp);
  *           schema:
  *             $ref: '#/components/schemas/SignInRequest'
  *     responses:
- *       201:
+ *       200:
  *         description: Sign in successfully
  *       400:
  *         description: Invalid input data

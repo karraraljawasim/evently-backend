@@ -2,7 +2,7 @@
 
 ## A backend REST API for an event management and registration platform
 
-Evently-API started as a hands-on deep dive into backend development fundamentals. Rather than building isolated examples, the goal was to design a complete, realistic:
+Evently is a backend REST API I built to manage event creation and attendee registrations. I designed it with a focus on data integrity, and clear user boundaries
 
 - **Authentication Flows:** Secure user registration and login.
 - **Protected Routes:** Middleware-driven access control for sensitive data.
@@ -71,7 +71,6 @@ These routes are open to everyone and do not require a JWT.
 
 | Method | Endpoint                    | Description                                                           |
 | ------ | --------------------------- | --------------------------------------------------------------------- |
-| `GET`  | `/events`                   | Returns all events the authenticated attendee has registered for.     |
 | `GET`  | `/events/current-register`  | Returns all the events that the user is currently logged into.        |
 | `GET`  | `/events/upcoming`          | Returns all events with a future date that are open for registration. |
 | `GET`  | `/events/:eventId`          | Returns the full details of a single event by its ID.                 |
@@ -100,7 +99,6 @@ Make sure the following are installed on your machine before proceeding:
 
 - [Node.js](https://nodejs.org/) v20 or higher
 - [PostgreSQL](https://www.postgresql.org/) v14 or higher
-- `npm` (comes bundled with Node.js)
 
 ---
 
@@ -109,8 +107,8 @@ Make sure the following are installed on your machine before proceeding:
 **1. Clone the repository:**
 
 ```bash
-git clone https://github.com/karraraljawasim/evently-api.git
-cd evently-api
+git clone https://github.com/karraraljawasim/evently-backend.git
+cd evently-backend
 ```
 
 **2. Install all dependencies:**
@@ -125,16 +123,14 @@ npm install
 
 The project requires two environment files in the root directory:
 
-- **`.env.production.local`** — Stores local-only overrides for sensitive variables used when running your app in a simulated production environment.
+- **`.env`** 
 
-- **`.env.development.local`** — Stores local-only overrides for variables used during active development.
 
 Create both files and fill in the values below:
 
-```.env.development.local
+```.env
 # Server Configuration
 PORT=8080
-NODE_ENV="development"
 
 # Database Configuration
 DB_USER=postgres
@@ -147,14 +143,13 @@ DB_NAME=evently_api_db
 DATABASE_URL=postgresql://[user]:[password]@localhost:5432/evently_api_db
 
 # JWT Configuration
-JWT_SECRET="[a_long_random_secret_string]"
-JWT_EXPIRES_IN="4d"
+JWT_SECRET="But_Your_JWT_SECRET_Her"
+JWT_EXPIRES_IN="Your_JWT_EXPIERS"
 ```
 
 **Tips:**
 
 - `JWT_EXPIRES_IN` controls how long a token remains valid. `"4d"` means tokens expire after 4 days.
-- Never commit `.env.development.local` or `.env.production.local` to version control. Add them to `.gitignore`.
 
 ---
 
@@ -163,7 +158,7 @@ JWT_EXPIRES_IN="4d"
 **Step 1 — Create the database:**
 
 ```bash
-psql -U postgres -c 'CREATE DATABASE \"evently_api_db\";'
+psql -U postgres -c 'CREATE DATABASE \"evently\";'
 ```
 
 **Or Create the database by using a visual tool like pgAdmin**
@@ -195,61 +190,61 @@ npm run migrate:create -- your-migration-name
 **Development mode** — starts the server with `nodemon` for automatic restarts on file changes:
 
 ```bash
-npm run start:dev
+npm run dev
 ```
 
-**Production mode** — starts the server with `nodemon` for automatic restarts on file changes:
-
-```bash
-npm run start:pro
-```
-
-The API will be available at `http://localhost:8080` (or whatever `PORT` is set to in your `.env.development.local`).
+The API will be available at `http://localhost:8080` (or whatever `PORT` is set to in your `.env`).
 
 ---
 
 ## Scripts Reference
 
-| Script                   | Command                                                 | Description                          |
-| ------------------------ | ------------------------------------------------------- | ------------------------------------ |
-| `npm start`              | `node app.js`                                           | Start the server with node           |
-| `start:pro`              | `cross-env NODE_ENV=production nodemon server.js`       | Start the server in production mode  |
-| `start:dev`              | `cross-env NODE_ENV=development nodemon server.js`      | Start the server in development mode |
-| `npm run migrate up`     | `node-pg-migrate up --envPath .env.development.local`   | Apply all pending migrations         |
-| `npm run migrate down`   | `node-pg-migrate down --envPath .env.development.local` | Roll back the last applied migration |
-| `npm run migrate:create` | `node-pg-migrate create --module-type esm`              | Generate a new ESM migration file    |
+| Script         | Command                                            | Description                   |
+| -------------- |----------------------------------------------------| ----------------------------- |
+| `start`        | `node app.js`                                      | Start the server with node    |
+| `dev`          | `nodemon server.js`                                | Start the server in development mode |
+| `npm run migrate up` | `node-pg-migrate up --envPath .env`                | Apply all pending migrations  |
+| `npm run migrate:create` | `node-pg-migrate create --module-type esm`         | Generate a new ESM migration file |
 
 ---
 
+## API Documentation
+
+The API is fully documented and interactive using Swagger. You can view request schemas, required fields, and test the endpoints directly from your browser.
+* PORT = 8080 or what you PORT set in .env
+* **Local Access:** Start the backend server and navigate to `http://localhost:8080/api-docs` 
+
+---
 ## Project Structure
 
 ```
 evently-api/
 ├── config/
-│   └── env.js                          # Loads and validates environment variables
+│   └── env.js                          
 ├── controllers/
-│   ├── attendee.controller.js          # Attendee business logic (browse, search, register)
-│   ├── auth.controller.js              # Auth logic (signup, signin, password hashing)
-│   └── organizer.controller.js         # Organizer business logic (create, update, delete)
+│   ├── attendee.controller.js         
+│   ├── auth.controller.js              
+│   └── organizer.controller.js         
 ├── database/
-│   └── db.js                           # PostgreSQL connection pool
+│   └── db.js                           
 ├── middlewares/
-│   ├── auth.middleware.js              # JWT verification for protected routes
-│   └── errorHandler.middleware.js      # Global error handler — formats all errors to JSON
-├── migrations/                         # node-pg-migrate versioned schema files
+│   ├── auth.middleware.js              
+│   └── errorHandler.middleware.js      
+├── migrations/                        
 ├── models/
-│   ├── attendee.models.js              # DB queries for attendee operations
-│   ├── auth.models.js                  # DB queries for user registration and login
-│   └── organizer.models.js             # DB queries for organizer operations
+│   ├── attendee.models.js              
+│   ├── auth.models.js                  
+│   └── organizer.models.js            
 ├── routes/
-│   ├── attendee.routes.js              # GET /events, POST /register, GET /search
-│   ├── auth.routes.js                  # POST /signup, POST /signin
-│   └── organizer.routes.js             # POST, PUT, DELETE /events, GET /attendees
+│   ├── attendee.routes.js             
+│   ├── auth.routes.js                  
+│   └── organizer.routes.js            
 ├── utils/
-│   └── AppError.js                     # Custom error class with statusCode and message
-├── .env.development.local              # Local dev environment variables (not committed)
-├── .env.production.local               # Production environment variables (not committed)
-├── app.js                              # Entry point — Express setup, routes, error handler
-├── eslint.config.mjs                   # ESLint flat config for JS code quality
-└── package.json                        # Dependencies and npm scripts
+│   └── AppError.js                     
+├── .env.development.local              
+├── .env.production.local               
+├── app.js                             
+├── eslint.config.mjs                   
+├── package.json  
+└── swagger.js                 
 ```

@@ -81,13 +81,13 @@ export const signIn = async (req, res, next) => {
     }
     const user = await findUserByEmailModel(normalizedEmail);
     if (user.length === 0) {
-      const error = new AppError("User not found", 404);
+      const error = new AppError("Invalid email or password", 401);
       throw error;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user[0].password);
     if (!isPasswordValid) {
-      const error = new AppError("Invalid Password");
+      const error = new AppError("Invalid email or password ", 401);
       throw error;
     }
 
