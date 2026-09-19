@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon server.js",
+    "dev": "nodemon app.js",
     "migrate": "node-pg-migrate --envPath .env",
     "migrate:up": "node-pg-migrate up",
     "migrate:create": "node-pg-migrate create --module-type esm"
