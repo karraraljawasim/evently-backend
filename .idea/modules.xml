@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/evently-api.iml" filepath="$PROJECT_DIR$/.idea/evently-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/evently-backend.iml" filepath="$PROJECT_DIR$/.idea/evently-backend.iml" />
     </modules>
   </component>
 </project>

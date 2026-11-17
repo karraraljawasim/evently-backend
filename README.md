@@ -1,4 +1,4 @@
-# Evently-API
+# Evently
 
 ## A backend REST API for an event management and registration platform
 
@@ -79,10 +79,10 @@ DB_USER=postgres
 DB_PASSWORD=[your_postgres_password]
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=evently_api_db
+DB_NAME=evently
 
 # Full Database Connection String
-DATABASE_URL=postgresql://[user]:[password]@localhost:5432/evently_api_db
+DATABASE_URL=postgresql://[user]:[password]@localhost:5432/evently
 
 # JWT Configuration
 JWT_SECRET="But_Your_JWT_SECRET_Her"
